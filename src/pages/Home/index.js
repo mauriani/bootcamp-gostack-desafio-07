@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import {ActivityIndicator} from 'react-native';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 
@@ -25,10 +26,13 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 class Home extends Component {
   state = {
     products: [],
+    loading: false,
   };
 
   async componentDidMount() {
     try {
+      this.setState({loading: true});
+
       const response = await api.get('products');
 
       const data = response.data.map((product) => ({
@@ -36,7 +40,7 @@ class Home extends Component {
         priceFormatted: formatPrice(product.price),
       }));
 
-      this.setState({products: data});
+      this.setState({products: data, loading: false});
     } catch (err) {
       console.error(err);
     }
@@ -49,34 +53,42 @@ class Home extends Component {
   };
 
   render() {
-    const {products} = this.state;
+    const {products, loading} = this.state;
     const {amount} = this.props;
 
     return (
       <Container>
         <Header />
-        <HorizontalScrollView>
-          {products.map((product) => (
-            <CartProduct key={product.id}>
-              <ImageProduct
-                source={{uri: product.image}}
-                resizeMode="contain"></ImageProduct>
-              <TitleProduct>{product.title}</TitleProduct>
-              <TitlePrice>{product.priceFormatted}</TitlePrice>
+        {loading ? (
+          <ActivityIndicator
+            color="#fff"
+            size="large"
+            style={{flex: 1, ustifyContent: 'center'}}
+          />
+        ) : (
+          <HorizontalScrollView>
+            {products.map((product) => (
+              <CartProduct key={product.id}>
+                <ImageProduct
+                  source={{uri: product.image}}
+                  resizeMode="contain"></ImageProduct>
+                <TitleProduct>{product.title}</TitleProduct>
+                <TitlePrice>{product.priceFormatted}</TitlePrice>
 
-              <ButtonAddProduct
-                onPress={() => this.handleAddProduct(product.id)}>
-                <ProductAmount>
-                  <Icon name="shopping-cart" size={25} color="#fff" />
-                  <ProductAmountText>
-                    {amount[product.id] || 0}
-                  </ProductAmountText>
-                </ProductAmount>
-                <ButtonAddProductText>ADICIONAR</ButtonAddProductText>
-              </ButtonAddProduct>
-            </CartProduct>
-          ))}
-        </HorizontalScrollView>
+                <ButtonAddProduct
+                  onPress={() => this.handleAddProduct(product.id)}>
+                  <ProductAmount>
+                    <Icon name="shopping-cart" size={25} color="#fff" />
+                    <ProductAmountText>
+                      {amount[product.id] || 0}
+                    </ProductAmountText>
+                  </ProductAmount>
+                  <ButtonAddProductText>ADICIONAR</ButtonAddProductText>
+                </ButtonAddProduct>
+              </CartProduct>
+            ))}
+          </HorizontalScrollView>
+        )}
       </Container>
     );
   }
