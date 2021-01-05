@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {ScrollView, Text} from 'react-native';
 import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
 
 import {
   Container,
@@ -25,17 +26,26 @@ import {
   ButtonFinalizar,
   ButtonText,
 } from './styles';
+
 import Header from '../../components/Header';
+import * as CartActions from '../../store/modules/cart/actions';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
-function Cart({cart, dispatch}) {
+function Cart({cart, removeFromCart, updateAmount}) {
+  function increment(product) {
+    updateAmount(product.id, product.amount + 1);
+  }
+
+  function decrement(product) {
+    updateAmount(product.id, product.amount - 1);
+  }
   return (
     <Container>
       <Header />
       <ScrollView>
         <Products vertical={true}>
           {cart.map((product) => (
-            <CardProduct>
+            <CardProduct key={String(product.id)}>
               <ProductInfo>
                 <Image
                   source={{uri: product.image}}
@@ -43,10 +53,10 @@ function Cart({cart, dispatch}) {
 
                 <Details>
                   <TitleProduct>{product.title}</TitleProduct>
-                  <TitlePrice>R$ {product.price}</TitlePrice>
+                  <TitlePrice>{product.priceFormatted}</TitlePrice>
                 </Details>
 
-                <ButtonDelete onPress={() => dispatch()}>
+                <ButtonDelete onPress={() => removeFromCart(product.id)}>
                   <Icon name="delete" size={28} color="#7159c1" />
                 </ButtonDelete>
               </ProductInfo>
@@ -54,7 +64,7 @@ function Cart({cart, dispatch}) {
               <Divider />
 
               <CardBody>
-                <ButtonSub>
+                <ButtonSub onPress={() => decrement(product)}>
                   <Icon
                     name="remove-circle-outline"
                     size={28}
@@ -62,9 +72,9 @@ function Cart({cart, dispatch}) {
                   />
                 </ButtonSub>
 
-                <Input value={String(product.amount)} />
+                <Input readOnly value={String(product.amount)} />
 
-                <ButtonAdd>
+                <ButtonAdd onPress={() => increment(product)}>
                   <Icon name="add-circle-outline" size={28} color="#7159c1" />
                 </ButtonAdd>
 
@@ -95,4 +105,7 @@ const mapStateToProps = (state) => ({
   cart: state.cart,
 });
 
-export default connect(mapStateToProps)(Cart);
+const mapDispatchToProps = (dispatch) =>
+  bindActionCreators(CartActions, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(Cart);

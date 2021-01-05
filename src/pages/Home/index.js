@@ -15,9 +15,8 @@ import {
   ButtonAddProductText,
 } from './styles';
 
-//import {formatPrice} from '../../util/format';
-
 import Header from '../../components/Header';
+import {formatPrice} from '../../util/format';
 import api from '../../services/api';
 import * as CartActions from '../../store/modules/cart/actions';
 
@@ -30,9 +29,14 @@ class Home extends Component {
 
   async componentDidMount() {
     try {
-      const response = await api.get('/products');
+      const response = await api.get('products');
 
-      this.setState({products: response.data});
+      const data = response.data.map((product) => ({
+        ...product,
+        priceFormatted: formatPrice(product.price),
+      }));
+
+      this.setState({products: data});
     } catch (err) {
       console.error(err);
     }
@@ -57,7 +61,7 @@ class Home extends Component {
                 source={{uri: product.image}}
                 resizeMode="contain"></ImageProduct>
               <TitleProduct>{product.title}</TitleProduct>
-              <TitlePrice>R$ {product.price}</TitlePrice>
+              <TitlePrice>{product.priceFormatted}</TitlePrice>
 
               <ButtonAddProduct onPress={() => this.handleAddProduct(product)}>
                 <ProductAmount>
