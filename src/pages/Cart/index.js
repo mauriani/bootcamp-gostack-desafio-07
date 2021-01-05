@@ -1,10 +1,14 @@
 import React, {Component} from 'react';
+import {ScrollView, Text} from 'react-native';
+import {connect} from 'react-redux';
 
 import {
   Container,
+  Products,
   CardProduct,
-  CardHeader,
+  ProductInfo,
   Image,
+  ButtonDelete,
   Details,
   TitleProduct,
   TitlePrice,
@@ -12,60 +16,83 @@ import {
   CardBody,
   ButtonAdd,
   Input,
-  ButtonRemove,
-  Price,
+  ButtonSub,
+  TotalContainer,
   TotalPrice,
+  Total,
+  TextTotal,
+  TotalText,
+  ButtonFinalizar,
+  ButtonText,
 } from './styles';
 import Header from '../../components/Header';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
-export default class Main extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
+function Cart({cart, dispatch}) {
+  return (
+    <Container>
+      <Header />
+      <ScrollView>
+        <Products vertical={true}>
+          {cart.map((product) => (
+            <CardProduct>
+              <ProductInfo>
+                <Image
+                  source={{uri: product.image}}
+                  resizeMode="contain"></Image>
 
-  render() {
-    return (
-      <Container>
-        <Header />
-        <CardProduct>
-          <CardHeader>
-            <Image
-              source={{
-                uri:
-                  'https://static.netshoes.com.br/produtos/tenis-nike-revolution-5-masculino/26/HZM-1731-026/HZM-1731-026_zoom1.jpg?ts=1571078789',
-              }}
-              resizeMode="contain"></Image>
+                <Details>
+                  <TitleProduct>{product.title}</TitleProduct>
+                  <TitlePrice>R$ {product.price}</TitlePrice>
+                </Details>
 
-            <Details>
-              <TitleProduct>
-                Tênis VR Caminhada Confortável Detalhes Couro Masculino
-              </TitleProduct>
-              <TitlePrice>R$ 180.00</TitlePrice>
-            </Details>
+                <ButtonDelete onPress={() => dispatch()}>
+                  <Icon name="delete" size={28} color="#7159c1" />
+                </ButtonDelete>
+              </ProductInfo>
 
-            <Icon name="delete" size={28} color="#7159c1" />
-          </CardHeader>
-          <Divider />
+              <Divider />
 
-          <CardBody>
-            <ButtonAdd>
-              <Icon name="add-circle-outline" size={28} color="#7159c1" />
-            </ButtonAdd>
+              <CardBody>
+                <ButtonSub>
+                  <Icon
+                    name="remove-circle-outline"
+                    size={28}
+                    color="#7159c1"
+                  />
+                </ButtonSub>
 
-            <Input>1</Input>
+                <Input value={String(product.amount)} />
 
-            <ButtonRemove>
-              <Icon name="remove-circle-outline" size={28} color="#7159c1" />
-            </ButtonRemove>
+                <ButtonAdd>
+                  <Icon name="add-circle-outline" size={28} color="#7159c1" />
+                </ButtonAdd>
 
-            <TotalPrice>R$ 340, 00</TotalPrice>
-          </CardBody>
+                <Text>Subtotal</Text>
+                <TotalPrice>R$ 250.0</TotalPrice>
+              </CardBody>
+            </CardProduct>
+          ))}
 
-          <Total>R$ 340, 00</Total>
-        </CardProduct>
-      </Container>
-    );
-  }
+          <TotalContainer>
+            <Total>
+              <TextTotal>Total</TextTotal>
+              <TotalText>R$ 340, 00</TotalText>
+            </Total>
+
+            <ButtonFinalizar>
+              <ButtonText>Finalizar Pedido</ButtonText>
+            </ButtonFinalizar>
+          </TotalContainer>
+        </Products>
+      </ScrollView>
+    </Container>
+  );
 }
+
+// essa função pega informações do estado e vai mapear as nossas informações
+const mapStateToProps = (state) => ({
+  cart: state.cart,
+});
+
+export default connect(mapStateToProps)(Cart);

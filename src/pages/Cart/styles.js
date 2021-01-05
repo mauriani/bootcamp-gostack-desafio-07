@@ -4,14 +4,18 @@ export const Container = styled.View`
   flex: 1;
   background-color: #191920;
 `;
-
-export const CardProduct = styled.View`
+export const Products = styled.View`
   background-color: #fff;
-  height: 300px;
-  border-radius: 20px;
+  margin-left: 5px;
+  margin-right: 5px;
+  padding: 10px;
+  margin-bottom: 20px;
+  height: auto;
 `;
 
-export const CardHeader = styled.View`
+export const CardProduct = styled.View``;
+
+export const ProductInfo = styled.View`
   flex-direction: row;
   align-items: center;
   padding: 5px;
@@ -22,6 +26,8 @@ export const Image = styled.Image`
   height: 120px;
   width: 220px;
 `;
+
+export const ButtonDelete = styled.TouchableOpacity``;
 
 export const Details = styled.View`
   flex: 1;
@@ -64,18 +70,47 @@ export const Input = styled.TextInput`
   width: 50px;
 `;
 
-export const ButtonRemove = styled.TouchableOpacity`
+export const ButtonSub = styled.TouchableOpacity`
   border: 0;
   padding: 6px;
 `;
 
-export const Price = styled.Text`
+export const TotalContainer = styled.View``;
+
+export const TotalPrice = styled.Text`
   font-weight: bold;
   font-size: 17px;
   margin-left: 30px;
 `;
 
-export const Total = styled.Text`
+export const Total = styled.View`
+  align-items: center;
+  justify-content: center;
+`;
+
+export const TextTotal = styled.Text`
+  font-size: 20px;
+  color: #ccc;
+`;
+
+export const TotalText = styled.Text`
   font-weight: bold;
   font-size: 25px;
+`;
+
+export const ButtonFinalizar = styled.TouchableOpacity`
+  border-radius: 10px;
+  background-color: #7159c1;
+  justify-content: center;
+  align-items: center;
+  margin-right: 10px;
+  margin-left: 10px;
+  margin-top: 10px;
+  height: 35px;
+`;
+
+export const ButtonText = styled.Text`
+  font-weight: bold;
+  text-transform: uppercase;
+  color: #fff;
 `;
