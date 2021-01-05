@@ -50,7 +50,8 @@ class Home extends Component {
 
   render() {
     const {products} = this.state;
-    console.tron.log(products);
+    const {amount} = this.props;
+
     return (
       <Container>
         <Header />
@@ -66,7 +67,9 @@ class Home extends Component {
               <ButtonAddProduct onPress={() => this.handleAddProduct(product)}>
                 <ProductAmount>
                   <Icon name="shopping-cart" size={25} color="#fff" />
-                  <ProductAmountText>0</ProductAmountText>
+                  <ProductAmountText>
+                    {amount[product.id] || 0}
+                  </ProductAmountText>
                 </ProductAmount>
                 <ButtonAddProductText>ADICIONAR</ButtonAddProductText>
               </ButtonAddProduct>
@@ -78,8 +81,15 @@ class Home extends Component {
   }
 }
 
+const mapStateToProps = (state) => ({
+  amount: state.cart.reduce((amount, product) => {
+    amount[product.id] = product.amount;
+    return amount;
+  }, {}),
+});
+
 // converte actions do redux em propriedades do nosso componente
 const mapDispatchToProps = (dispatch) =>
   bindActionCreators(CartActions, dispatch);
 
-export default connect(null, mapDispatchToProps)(Home);
+export default connect(mapStateToProps, mapDispatchToProps)(Home);

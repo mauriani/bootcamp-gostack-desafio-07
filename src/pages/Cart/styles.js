@@ -90,6 +90,7 @@ export const Total = styled.View`
 
 export const TextTotal = styled.Text`
   font-size: 20px;
+
   color: #ccc;
 `;
 

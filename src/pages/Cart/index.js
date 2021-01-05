@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 import {ScrollView, Text} from 'react-native';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
@@ -28,10 +28,11 @@ import {
 } from './styles';
 
 import Header from '../../components/Header';
+import {formatPrice} from '../../util/format';
 import * as CartActions from '../../store/modules/cart/actions';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
-function Cart({cart, removeFromCart, updateAmount}) {
+function Cart({cart, total, removeFromCart, updateAmount}) {
   function increment(product) {
     updateAmount(product.id, product.amount + 1);
   }
@@ -79,7 +80,7 @@ function Cart({cart, removeFromCart, updateAmount}) {
                 </ButtonAdd>
 
                 <Text>Subtotal</Text>
-                <TotalPrice>R$ 250.0</TotalPrice>
+                <TotalPrice>{product.subtotal}</TotalPrice>
               </CardBody>
             </CardProduct>
           ))}
@@ -87,7 +88,7 @@ function Cart({cart, removeFromCart, updateAmount}) {
           <TotalContainer>
             <Total>
               <TextTotal>Total</TextTotal>
-              <TotalText>R$ 340, 00</TotalText>
+              <TotalText>{total}</TotalText>
             </Total>
 
             <ButtonFinalizar>
@@ -102,7 +103,17 @@ function Cart({cart, removeFromCart, updateAmount}) {
 
 // essa função pega informações do estado e vai mapear as nossas informações
 const mapStateToProps = (state) => ({
-  cart: state.cart,
+  cart: state.cart.map((product) => ({
+    ...product,
+    subtotal: formatPrice(product.price * product.amount),
+  })),
+  // reduce => pegar um array e reduzir
+  total: formatPrice(
+    //inicia com o valor zero
+    state.cart.reduce((total, product) => {
+      return total + product.price * product.amount;
+    }, 0)
+  ),
 });
 
 const mapDispatchToProps = (dispatch) =>
