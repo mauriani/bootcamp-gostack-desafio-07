@@ -26,6 +26,7 @@ export default class Home extends Component {
   async componentDidMount() {
     try {
       const response = await api.get('/products');
+      
       this.setState({products: response.data});
     } catch (err) {
       console.error(err);
@@ -40,6 +41,7 @@ export default class Home extends Component {
 
   render() {
     const {products} = this.state;
+    console.tron.log(products);
     return (
       <Container>
         <Header />
