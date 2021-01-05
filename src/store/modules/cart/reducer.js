@@ -2,7 +2,7 @@ import produce from 'immer';
 export default function cart(state = [], action) {
   console.tron.log(state);
   switch (action.type) {
-    case '@cart/ADD':
+    case '@cart/ADD_SUCCESS':
       return produce(state, (draft) => {
         // verifico se aquele index existe
         const productIndex = draft.findIndex((p) => p.id === action.product.id);
