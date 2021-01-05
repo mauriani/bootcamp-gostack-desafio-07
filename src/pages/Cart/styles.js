@@ -78,9 +78,15 @@ export const ButtonSub = styled.TouchableOpacity`
 export const TotalContainer = styled.View``;
 
 export const TotalPrice = styled.Text`
+  font-size: 12px;
+  color: #999;
+  margin-left: 5px;
+`;
+export const TotalPriceBold = styled.Text`
   font-weight: bold;
+  margin-right: 5px;
+  color: #111;
   font-size: 17px;
-  margin-left: 30px;
 `;
 
 export const Total = styled.View`

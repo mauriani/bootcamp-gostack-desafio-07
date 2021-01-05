@@ -20,6 +20,7 @@ import {
   ButtonSub,
   TotalContainer,
   TotalPrice,
+  TotalPriceBold,
   Total,
   TextTotal,
   TotalText,
@@ -79,8 +80,9 @@ function Cart({cart, total, removeFromCart, updateAmountRequest}) {
                   <Icon name="add-circle-outline" size={28} color="#7159c1" />
                 </ButtonAdd>
 
-                <Text>Subtotal</Text>
-                <TotalPrice>{product.subtotal}</TotalPrice>
+                <TotalPrice>
+                  Subtotal <TotalPriceBold>{product.subtotal}</TotalPriceBold>
+                </TotalPrice>
               </CardBody>
             </CardProduct>
           ))}
