@@ -18,10 +18,10 @@ $ yarn install # ou npm install
 
 ```
 
-- Para dá start na aplicação precisamos deixar a api rodando juntamente com o nosso react.
+- Para dá start na aplicação precisamos deixar a api rodando juntamente com o nosso react. No caso do react native é necessário usar o ip da sua máquina já que a propria api está configurada da mesma forma.
 
 ```jsx
-npx json-server server.json -p 3333
+npx json-server --host 192.168.1.148 server.json 
 yarn start
 ```
 
