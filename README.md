@@ -1,9 +1,5 @@
 ### RocketShoes
 
-
-<img src="https://user-images.githubusercontent.com/32397288/103791535-54190200-5021-11eb-86dc-a97646046356.png" > 
-<img src="https://user-images.githubusercontent.com/32397288/103791552-58ddb600-5021-11eb-8406-d1a03d838aa1.png" > 
-
 ### Projeto
 
 Essa aplicação foi um desafio do modulo 07 do bootcamp da Rocketseat.
@@ -52,3 +48,7 @@ npx json-server server.json -p 3333
 - [x]  Redux Saga
 - [x]  Json Server
 - [x]  Reactotron
+
+
+<img src="https://user-images.githubusercontent.com/32397288/103791535-54190200-5021-11eb-86dc-a97646046356.png" width="200"> | <img src="https://user-images.githubusercontent.com/32397288/103791552-58ddb600-5021-11eb-8406-d1a03d838aa1.png" width="200"> | 
+
