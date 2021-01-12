@@ -84,7 +84,6 @@ export const TotalPrice = styled.Text`
 `;
 export const TotalPriceBold = styled.Text`
   font-weight: bold;
-  margin-right: 5px;
   color: #111;
   font-size: 17px;
 `;

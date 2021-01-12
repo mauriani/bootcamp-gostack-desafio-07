@@ -1,7 +1,6 @@
-import React, {Component} from 'react';
+import React, {useState, useEffect} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
 import {ActivityIndicator} from 'react-native';
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
 
 import {
   Container,
@@ -23,15 +22,22 @@ import * as CartActions from '../../store/modules/cart/actions';
 
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
-class Home extends Component {
-  state = {
-    products: [],
-    loading: false,
-  };
+export default function Home() {
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-  async componentDidMount() {
-    try {
-      this.setState({loading: true});
+  const amount = useSelector((state) =>
+    state.cart.reduce((sumAmount, product) => {
+      sumAmount[product.id] = product.amount;
+      return sumAmount;
+    }, {})
+  );
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    async function loadProducts() {
+      setLoading(true);
 
       const response = await api.get('products');
 
@@ -40,69 +46,49 @@ class Home extends Component {
         priceFormatted: formatPrice(product.price),
       }));
 
-      this.setState({products: data, loading: false});
-    } catch (err) {
-      console.error(err);
+      setProducts(data);
+      setLoading(false);
     }
+
+    loadProducts();
+  }, []);
+
+  function handleAddProduct(id) {
+    dispatch(CartActions.addToCartRequest(id));
   }
 
-  handleAddProduct = (id) => {
-    //dispatch server para disparar uma action ao reducer
-    const {addToCartRequest} = this.props;
-    addToCartRequest(id);
-  };
+  return (
+    <Container>
+      <Header />
+      {loading ? (
+        <ActivityIndicator
+          color="#fff"
+          size="large"
+          style={{flex: 1, ustifyContent: 'center'}}
+        />
+      ) : (
+        <HorizontalScrollView>
+          {products.map((product) => (
+            <CartProduct key={product.id}>
+              <ImageProduct
+                source={{uri: product.image}}
+                resizeMode="contain"></ImageProduct>
+              <TitleProduct>{product.title}</TitleProduct>
+              <TitlePrice>{product.priceFormatted}</TitlePrice>
 
-  render() {
-    const {products, loading} = this.state;
-    const {amount} = this.props;
-
-    return (
-      <Container>
-        <Header />
-        {loading ? (
-          <ActivityIndicator
-            color="#fff"
-            size="large"
-            style={{flex: 1, ustifyContent: 'center'}}
-          />
-        ) : (
-          <HorizontalScrollView>
-            {products.map((product) => (
-              <CartProduct key={product.id}>
-                <ImageProduct
-                  source={{uri: product.image}}
-                  resizeMode="contain"></ImageProduct>
-                <TitleProduct>{product.title}</TitleProduct>
-                <TitlePrice>{product.priceFormatted}</TitlePrice>
-
-                <ButtonAddProduct
-                  onPress={() => this.handleAddProduct(product.id)}>
-                  <ProductAmount>
-                    <Icon name="shopping-cart" size={25} color="#fff" />
-                    <ProductAmountText>
-                      {amount[product.id] || 0}
-                    </ProductAmountText>
-                  </ProductAmount>
-                  <ButtonAddProductText>ADICIONAR</ButtonAddProductText>
-                </ButtonAddProduct>
-              </CartProduct>
-            ))}
-          </HorizontalScrollView>
-        )}
-      </Container>
-    );
-  }
+              <ButtonAddProduct onPress={() => handleAddProduct(product.id)}>
+                <ProductAmount>
+                  <Icon name="shopping-cart" size={25} color="#fff" />
+                  <ProductAmountText>
+                    {amount[product.id] || 0}
+                  </ProductAmountText>
+                </ProductAmount>
+                <ButtonAddProductText>ADICIONAR</ButtonAddProductText>
+              </ButtonAddProduct>
+            </CartProduct>
+          ))}
+        </HorizontalScrollView>
+      )}
+    </Container>
+  );
 }
-
-const mapStateToProps = (state) => ({
-  amount: state.cart.reduce((amount, product) => {
-    amount[product.id] = product.amount;
-    return amount;
-  }, {}),
-});
-
-// converte actions do redux em propriedades do nosso componente
-const mapDispatchToProps = (dispatch) =>
-  bindActionCreators(CartActions, dispatch);
-
-export default connect(mapStateToProps, mapDispatchToProps)(Home);
