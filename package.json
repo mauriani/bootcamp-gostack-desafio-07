@@ -14,7 +14,7 @@
     "@react-navigation/native": "^5.8.10",
     "@react-navigation/stack": "^5.12.8",
     "axios": "^0.21.1",
-    "immer": "^8.0.0",
+    "immer": "^8.0.1",
     "intl": "^1.2.5",
     "polished": "^4.0.5",
     "react": "16.13.1",
