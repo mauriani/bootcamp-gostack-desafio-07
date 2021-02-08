@@ -11,7 +11,7 @@ Essa aplicação foi um desafio do modulo 07 do bootcamp da Rocketseat.
 ### Iniciando a Aplicação
 
 ```
-$ git clone <https://github.com/mauriani/bootcamp-gostack-desafio-07>
+$ git clone https://github.com/mauriani/RocketShoes-Mobile.git
 
 ```
 
